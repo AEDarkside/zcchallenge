@@ -1,7 +1,7 @@
 import json
 import requests
 from settings import subdomain, list_url #settings.py is store on local machine only during development
-from utils import connectToApi, connectionErrorHandling
+from utils import connectToApi, connectionErrorHandling, print_menu
 
 class EndPoint:
     def __init__(self, subdomain):
@@ -49,8 +49,24 @@ class EndPoint:
                         for i in range(0, remamin_tkts):
                             print(data['tickets'][i]['id'])
 
-    def displayMenu(self):
-        
+    def display_menu(self):
+        menu = True
+        while menu:
+            print_menu()
+            choice = input('Select your view option: ')
+
+            if choice == '1':
+                view_ticket.TicketListing()
+            elif choice == '2':
+                print('This function is not yet implmented.')
+                input('Now back to Menu, press any key to continue..')
+            elif choice == 'quit':
+                menu = False
+                print('Closing down Ticket Viewer...')
+                exit()
+            else:
+                input('wrong option selected, press any key back to menu')
 
 view_ticket = EndPoint(subdomain)
-view_ticket.TicketListing()
+view_ticket.display_menu()
+#view_ticket.TicketListing()

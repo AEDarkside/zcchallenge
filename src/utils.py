@@ -31,4 +31,11 @@ def connectionErrorHandling(self, status_code):
     elif status_code == 503:
         return error_code['503']
     elif status_code == 504:
-        return error_code['504']    
+        return error_code['504']   
+
+def print_menu():
+    print(30 * '-' + 'Welcome to your Ticket Viewer' + 30 * '-'
+    + '\nPress 1 - Listing all Tickets'
+    + '\nPress 2 - View a Ticket by Ticket ID'
+    + '\nType "quit" to exit'
+    + '\n' + 89 * '-') 
