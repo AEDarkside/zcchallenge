@@ -1,7 +1,7 @@
 import json
 import requests
-from settings import subdomain, api_user, api_pwd, list_url #settings.py is store on local machine only during development
-from utils import connectToApi
+from settings import subdomain, list_url #settings.py is store on local machine only during development
+from utils import connectToApi, connectionErrorHandling
 
 class EndPoint:
     def __init__(self, subdomain):
@@ -9,15 +9,14 @@ class EndPoint:
 
     #Request Ticket via HTTP request (experimental)
     def TicketListing(self):
-        target_url = subdomain + list_url
+        target_url = self._subdomain + list_url
         response = connectToApi(self, target_url)
-        data = response.json()
-        ticket_count = data['count']
         #check if response code other than 200
         if response.status_code != 200:
-            print('Request Error, Status code: ', response.status_code)
-            exit()
+            print(connectionErrorHandling(self, response.status_code))
         else:
+            data = response.json()
+            ticket_count = data['count']
             print('Request Successful, Status code: ', response.status_code)
             if ticket_count > 25:
                 pages = int(ticket_count / 25)
@@ -49,6 +48,9 @@ class EndPoint:
                     else:
                         for i in range(0, remamin_tkts):
                             print(data['tickets'][i]['id'])
+
+    def displayMenu(self):
+        
 
 view_ticket = EndPoint(subdomain)
 view_ticket.TicketListing()
