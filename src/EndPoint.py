@@ -1,6 +1,6 @@
 import json
 import requests
-from settings import subdomain, list_url #settings.py is store on local machine only during development
+from settings import subdomain, list_url, api_url, content_type #settings.py is store on local machine only during development
 from utils import connectToApi, connectionErrorHandling, print_menu
 
 class EndPoint:
@@ -34,8 +34,7 @@ class EndPoint:
                 data = response.json()
                 #check if response code other than 200
                 if response.status_code != 200:
-                    print('Request Error, Status code: ', response.status_code)
-                    exit()
+                    print(connectionErrorHandling(self, response.status_code))
                 else:
                     if remamin_tkts > 25:
                         pages = int(remamin_tkts / 25)
@@ -48,7 +47,20 @@ class EndPoint:
                     else:
                         for i in range(0, remamin_tkts):
                             print(data['tickets'][i]['id'])
+    
+    #list one particular ticket with the ticket id provide by the user
+    def list_single_ticket(self):
+        ticket_id = input('Enter the ticket ID you want to see: ')
+        target_url = subdomain + api_url + ticket_id + content_type
+        response = connectToApi(self, target_url)
+        data = response.json()
+        if response.status_code != 200:
+            print(connectionErrorHandling(self, response.status_code))
+        else:
+            print(data['ticket'])
+        input('Now back to Menu, press any key to continue..')    
 
+    #menu display function
     def display_menu(self):
         menu = True
         while menu:
@@ -58,8 +70,7 @@ class EndPoint:
             if choice == '1':
                 view_ticket.TicketListing()
             elif choice == '2':
-                print('This function is not yet implmented.')
-                input('Now back to Menu, press any key to continue..')
+                view_ticket.list_single_ticket()
             elif choice == 'quit':
                 menu = False
                 print('Closing down Ticket Viewer...')
@@ -69,4 +80,3 @@ class EndPoint:
 
 view_ticket = EndPoint(subdomain)
 view_ticket.display_menu()
-#view_ticket.TicketListing()
