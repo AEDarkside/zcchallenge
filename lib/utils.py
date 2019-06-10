@@ -1,6 +1,7 @@
 import requests, base64, datetime
 from os import name, system
-from lib.settings import api_user, api_pwd, error_code, list_item, time_format,ticket_limit
+from lib.settings import (api_user, api_pwd, error_code, list_item, time_format, 
+ticket_limit, ticekt_item)
 
 #decrypt password for use in authentication
 def get_password(self, api_pwd):
@@ -43,18 +44,18 @@ def print_ticket_list(self, response):
     print('Request Successful, Status code: ', response.status_code)
     pages = int(ticket_count / int(ticket_limit))
     remamin_tkts = ticket_count - pages * int(ticket_limit)
-
+    #display total pages
     if(remamin_tkts > 0):
         pages += 1
     print('You have total of ' + str(pages) + ' pages of tickets' 
     + '\n' + 100 * '-')
-
+    #print title for each page
     title_str = ''
     for item in data['tickets'][0]:
        if item in list_item:
             title_str += str(list_item[str(item)])
     print(title_str)    
-
+    #print ticket
     for ticket in data['tickets']:
         ticket_str = ''
         for item in ticket:
@@ -65,7 +66,7 @@ def print_ticket_list(self, response):
                 else: 
                     ticket_str += str(ticket[str(item)]) + '    '
         print(ticket_str)
-
+    #check if it contain next page or previous page
     if (data['next_page'] != None) & (data['previous_page'] != None):
         choice = input('Press "n" for next page, Press "p" for previous page, or press any key back to menu: ')
         if choice == 'n':
@@ -91,6 +92,30 @@ def print_ticket_list(self, response):
         else:
             return None
 
+#print ticket by ticket_id
+def print_single_ticket(self, data):
+    title_str = ''
+    for item in data['ticket']:
+        if item in ticekt_item:
+            if item == 'description':
+                continue
+            else:
+                title_str += str(ticekt_item[str(item)])
+    print(title_str)    
+    #print ticket
+    ticket_str = ''
+    for item in data['ticket']:
+        if item in ticekt_item:
+            if item == 'created_at':
+                date_obj = datetime.datetime.strptime(data['ticket'][str(item)], "%Y-%m-%dT%H:%M:%SZ")
+                ticket_str += date_obj.strftime(time_format) + '    '
+            elif item == 'description':
+                ticket_desc = str(data['ticket'][str(item)])
+            else: 
+                ticket_str += str(data['ticket'][str(item)]) + '    '
+    print(ticket_str + '\n' + 
+        100 * '-' + '\nDescription: \n' + ticket_desc)
+
 #this is to clear the screen
 def clear_screen():
     if name == 'nt':
@@ -101,7 +126,7 @@ def clear_screen():
 #print main menu
 def print_menu():
     print(35 * '-' + 'Welcome to your Ticket Viewer!' + 35 * '-'
-    + '\nPress 1 - Listing all Tickets'
-    + '\nPress 2 - View a Ticket by Ticket ID'
-    + '\nType "quit" to exit'
+    + '\nPress 1 - To List all Tickets'
+    + '\nPress 2 - To View a Ticket by Ticket ID'
+    + '\nType "quit" or Press "q" to exit the program'
     + '\n' + 100 * '-') 

@@ -1,7 +1,8 @@
 #This file contain few happy path test
 import unittest
 from lib.settings import list_url, subdomain, error_code
-from lib.utils import connect_to_Api, connection_error_handling, connect_api_with_user_input
+from lib.utils import (connect_to_Api, connection_error_handling, 
+connect_api_with_user_input)
 
 class viewer_test(unittest.TestCase):
     def test_connect_to_api(self):

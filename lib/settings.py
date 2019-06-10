@@ -21,11 +21,23 @@ error_code = {
     '504': '\nError code: 504, Gateway Timeout - please try it later.',
 }
 
+#listing dictionary
 list_item = {
     'id': 'ID   |',
     'created_at': 'Created at           |',
     'status': 'Status   |',
     'subject': 'Subject                                 |',
     'assignee_id': 'Assignee ID     |',
+}
+
+#ticket dictionary
+ticekt_item = {
+    'id': 'ID   |',
+    'created_at': 'Created at           |',
+    'status': 'Status   |',
+    'subject': 'Subject                                 |',
+    'assignee_id': 'Assignee ID     |',
+    'priority' : 'Priority  |',
+    'description': '\nDescription: ',
 }
 

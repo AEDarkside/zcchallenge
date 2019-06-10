@@ -1,6 +1,8 @@
 import json, requests
-from lib.settings import subdomain, list_url, api_url, content_type, per_page, ticket_limit
-from lib.utils import connect_to_Api, connection_error_handling, clear_screen, print_menu, print_ticket_list
+from lib.settings import (subdomain, list_url, api_url, content_type, per_page, 
+ticket_limit)
+from lib.utils import (connect_to_Api, connection_error_handling, clear_screen, 
+print_menu, print_ticket_list, print_single_ticket)
 
 class end_point:
     def __init__(self, subdomain):
@@ -15,7 +17,6 @@ class end_point:
             print(connection_error_handling(self, response.status_code))
         else:
             print_ticket_list(self, response)
-
             
     #list one particular ticket with the ticket id provide by the user
     def list_single_ticket(self):
@@ -27,8 +28,7 @@ class end_point:
         if response.status_code != 200:
             print(connection_error_handling(self, response.status_code))
         else:
-            for item in data['ticket']:
-                print(str(item) + ': ', data['ticket'][str(item)])
+            print_single_ticket(self, data)
         input(100 * '-' + '\nNow back to Menu, press any key to continue..')    
 
     #menu display function
@@ -44,7 +44,8 @@ class end_point:
                 view_ticket.list_single_ticket()
             elif choice in ('quit', 'q'):
                 menu = False
-                print('Closing down Ticket Viewer...')
+                print('Thansk for using the ticket viewer.' + 
+                '\nTerminating Ticket Viewer program...')
                 exit()
             else:
                 input('wrong option selected, press any key back to menu')
