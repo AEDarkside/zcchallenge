@@ -8,7 +8,7 @@ def get_password(self, api_pwd):
     return base64.b64decode(api_pwd)
 
 #this function connect to zendesk api taking the url as parameter
-def connect_to_Api(self, target_url):
+def connect_to_api(self, target_url):
     pwd = get_password(self, api_pwd)
     response = requests.get(target_url, auth=(api_user, pwd))
     return response
@@ -71,24 +71,24 @@ def print_ticket_list(self, response):
         choice = input('Press "n" for next page, Press "p" for previous page, or press any key back to menu: ')
         if choice == 'n':
             target_url = data['next_page']
-            print_ticket_list(self, connect_to_Api(self, target_url))
+            print_ticket_list(self, connect_to_api(self, target_url))
         elif choice == 'p':
             target_url = data['previous_page']
-            print_ticket_list(self, connect_to_Api(self, target_url))
+            print_ticket_list(self, connect_to_api(self, target_url))
         else:
             return None 
     elif (data['next_page'] != None) & (data['previous_page'] == None):
         choice = input('Press "n" for next page, or press any key back to menu: ')
         if choice == 'n':
             target_url = data['next_page']
-            print_ticket_list(self, connect_to_Api(self, target_url))
+            print_ticket_list(self, connect_to_api(self, target_url))
         else:
             return None
     else:
         choice = input('Press "p" for previous page, or any key back to menu: ')
         if choice == 'p':
             target_url = data['previous_page']
-            print_ticket_list(self, connect_to_Api(self, target_url))
+            print_ticket_list(self, connect_to_api(self, target_url))
         else:
             return None
 
