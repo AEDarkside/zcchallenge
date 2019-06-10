@@ -1,6 +1,6 @@
-import requests, base64
+import requests, base64, datetime
 from os import name, system
-from lib.settings import api_user, api_pwd, error_code
+from lib.settings import api_user, api_pwd, error_code, list_item, time_format,ticket_limit
 
 #decrypt password for use in authentication
 def get_password(self, api_pwd):
@@ -17,6 +17,7 @@ def connect_api_with_user_input(self, target_url, user, pwd):
     response = requests.get(target_url, auth=(user, pwd))
     return response
 
+#return corresponding error message base on status_code
 def connection_error_handling(self, status_code):
     if status_code == 400:
         return error_code['400']
@@ -35,12 +36,69 @@ def connection_error_handling(self, status_code):
     elif status_code == 504:
         return error_code['504']   
 
+#print all tickets in a list
+def print_ticket_list(self, response):
+    data = response.json()
+    ticket_count = data['count']
+    print('Request Successful, Status code: ', response.status_code)
+    pages = int(ticket_count / int(ticket_limit))
+    remamin_tkts = ticket_count - pages * int(ticket_limit)
+
+    if(remamin_tkts > 0):
+        pages += 1
+    print('You have total of ' + str(pages) + ' pages of tickets' 
+    + '\n' + 100 * '-')
+
+    title_str = ''
+    for item in data['tickets'][0]:
+       if item in list_item:
+            title_str += str(list_item[str(item)])
+    print(title_str)    
+
+    for ticket in data['tickets']:
+        ticket_str = ''
+        for item in ticket:
+            if item in list_item:
+                if item == 'created_at':
+                    date_obj = datetime.datetime.strptime(str(ticket[str(item)]), "%Y-%m-%dT%H:%M:%SZ")
+                    ticket_str += date_obj.strftime(time_format) + '    '
+                else: 
+                    ticket_str += str(ticket[str(item)]) + '    '
+        print(ticket_str)
+
+    if (data['next_page'] != None) & (data['previous_page'] != None):
+        choice = input('Press "n" for next page, Press "p" for previous page, or press any key back to menu: ')
+        if choice == 'n':
+            target_url = data['next_page']
+            print_ticket_list(self, connect_to_Api(self, target_url))
+        elif choice == 'p':
+            target_url = data['previous_page']
+            print_ticket_list(self, connect_to_Api(self, target_url))
+        else:
+            return None 
+    elif (data['next_page'] != None) & (data['previous_page'] == None):
+        choice = input('Press "n" for next page, or press any key back to menu: ')
+        if choice == 'n':
+            target_url = data['next_page']
+            print_ticket_list(self, connect_to_Api(self, target_url))
+        else:
+            return None
+    else:
+        choice = input('Press "p" for previous page, or any key back to menu: ')
+        if choice == 'p':
+            target_url = data['previous_page']
+            print_ticket_list(self, connect_to_Api(self, target_url))
+        else:
+            return None
+
+#this is to clear the screen
 def clear_screen():
     if name == 'nt':
         _ = system('cls')
     else:
         _ = system('clear')
 
+#print main menu
 def print_menu():
     print(35 * '-' + 'Welcome to your Ticket Viewer!' + 35 * '-'
     + '\nPress 1 - Listing all Tickets'

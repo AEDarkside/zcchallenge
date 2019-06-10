@@ -1,7 +1,6 @@
-import json
-import requests
-from lib.settings import subdomain, list_url, api_url, content_type, per_page, ticket_limit #settings.py is store on local machine only during development
-from lib.utils import connect_to_Api, connection_error_handling, clear_screen, print_menu
+import json, requests
+from lib.settings import subdomain, list_url, api_url, content_type, per_page, ticket_limit
+from lib.utils import connect_to_Api, connection_error_handling, clear_screen, print_menu, print_ticket_list
 
 class end_point:
     def __init__(self, subdomain):
@@ -15,24 +14,7 @@ class end_point:
         if response.status_code != 200:
             print(connection_error_handling(self, response.status_code))
         else:
-            data = response.json()
-            ticket_count = data['count']
-            clear_screen()
-            print('Request Successful, Status code: ', response.status_code)
-            pages = int(ticket_count / int(ticket_limit))
-            remamin_tkts = ticket_count - pages * int(ticket_limit)
-            if(remamin_tkts > 0):
-                pages += 1
-            print('You have total of ' + str(pages) + ' pages of tickets' 
-            + '\n' + 100 * '-')
-            for ticket in data['tickets']:
-                print(ticket)
-            if (data['next_page'] != None) & (data['previous_page'] != None):
-                choice = input('Press "n" for next page, Press "p" for previous page: ')
-            elif (data['next_page'] != None) & (data['previous_page'] == None):
-                choice = input('Press "n" for next page: ')
-            else:
-                choice = input('Press "p" for previous page: ')
+            print_ticket_list(self, response)
 
             
     #list one particular ticket with the ticket id provide by the user
@@ -41,6 +23,7 @@ class end_point:
         target_url = subdomain + api_url + ticket_id + content_type
         response = connect_to_Api(self, target_url)
         data = response.json()
+        #check if response code other than 200
         if response.status_code != 200:
             print(connection_error_handling(self, response.status_code))
         else:
@@ -52,6 +35,7 @@ class end_point:
     def display_menu(self):
         menu = True
         while menu:
+            clear_screen()
             print_menu()
             choice = input('Select your view option: ')
             if choice == '1':
