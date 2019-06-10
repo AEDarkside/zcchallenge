@@ -1,5 +1,6 @@
 import requests, base64
-from settings import api_user, api_pwd, error_code
+from os import name, system
+from src.settings import api_user, api_pwd, error_code
 
 def getPassword(self, api_pwd):
     return base64.b64decode(api_pwd)
@@ -33,9 +34,15 @@ def connectionErrorHandling(self, status_code):
     elif status_code == 504:
         return error_code['504']   
 
+def clear_screen():
+    if name == 'nt':
+        _ = system('cls')
+    else:
+        _ = system('clear')
+
 def print_menu():
-    print(30 * '-' + 'Welcome to your Ticket Viewer' + 30 * '-'
+    print(35 * '-' + 'Welcome to your Ticket Viewer!' + 35 * '-'
     + '\nPress 1 - Listing all Tickets'
     + '\nPress 2 - View a Ticket by Ticket ID'
     + '\nType "quit" to exit'
-    + '\n' + 89 * '-') 
+    + '\n' + 100 * '-') 
