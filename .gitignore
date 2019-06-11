@@ -1,4 +1,5 @@
 
-src/__pycache__/settings.cpython-36.pyc
+lib/__pycache__/*.pyc
+/__pycache__/*.pyc
 *.json
 *.pyc
