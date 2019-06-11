@@ -8,15 +8,15 @@ Ticket Viewer is a python program connected to Zendesk API and requested all tic
 - Display individual ticket detail by enter a ticket id as the search target
 
 ## File Structure
-root\
-    lib\
-        __init__.py     - empty but author name
-        settings.py     - contain secrets, configs and python dictionary
-        utils.py        - useful function to call API and parse data into message
-    __init__.py         - empty but author name
-    end_point.py        - main class contain menu and initialization of the program
-    README.md           - readme
-    test.py             - contain few tests
+    root\__
+        lib\
+            __init__.py     - empty but author name
+            settings.py     - contain secrets, configs and python dictionary
+            utils.py        - useful function to call API and parse data into message
+        __init__.py         - empty but author name
+        end_point.py        - main class contain menu and initialization of the program
+        README.md           - readme
+        test.py             - contain few tests
 
 ## Usage
 Placeholder for now
