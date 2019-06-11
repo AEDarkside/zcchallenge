@@ -1,5 +1,5 @@
 # Zcchallenge
-<p>This is a simple ticket viewer program written in python in response to '**Zendesk Coding Challenge 2019**'</p>
+This is a simple ticket viewer program written in python in response to '**Zendesk Coding Challenge 2019**'
 
 
 ## Ticket Viewer
