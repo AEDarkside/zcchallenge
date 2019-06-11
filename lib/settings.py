@@ -27,7 +27,7 @@ list_item = {
     'created_at': 'Created at           |',
     'status': 'Status   |',
     'subject': 'Subject                                 |',
-    'assignee_id': 'Assignee ID     |',
+    'requester_id': 'Requester ID     |',
 }
 
 #ticket dictionary
@@ -36,7 +36,7 @@ ticekt_item = {
     'created_at': 'Created at           |',
     'status': 'Status   |',
     'subject': 'Subject                                 |',
-    'assignee_id': 'Assignee ID     |',
+    'requester_id': 'Requester ID     |',
     'priority' : 'Priority  |',
     'description': '\nDescription: ',
 }

@@ -38,7 +38,7 @@ def connection_error_handling(self, status_code):
         return error_code['504']   
 
 #print all tickets in a list
-def print_ticket_list(self, response):
+def print_ticket_list(self, response, curr_page):
     data = response.json()
     ticket_count = data['count']
     print('Request Successful, Status code: ', response.status_code)
@@ -47,7 +47,7 @@ def print_ticket_list(self, response):
     #display total pages
     if(remamin_tkts > 0):
         pages += 1
-    print('You have total of ' + str(pages) + ' pages of tickets' 
+    print('page number: ' + str(curr_page) + ' of ' + str(pages) + ' page(s).'
     + '\n' + 100 * '-')
     #print title for each page
     title_str = ''
@@ -66,29 +66,37 @@ def print_ticket_list(self, response):
                 else: 
                     ticket_str += str(ticket[str(item)]) + '    '
         print(ticket_str)
-    #check if it contain next page or previous page
-    if (data['next_page'] != None) & (data['previous_page'] != None):
+    ticket_list_pagination(self, data['next_page'], data['previous_page'], curr_page)
+    
+#check if current page has next page or previous page
+def ticket_list_pagination(self, next_page, previous_page, curr_page):
+    print(100 * '=')
+    if (next_page != None) & (previous_page != None):
         choice = input('Press "n" for next page, Press "p" for previous page, or press any key back to menu: ')
         if choice == 'n':
-            target_url = data['next_page']
-            print_ticket_list(self, connect_to_api(self, target_url))
+            target_url = next_page
+            curr_page += 1
+            print_ticket_list(self, connect_to_api(self, target_url), curr_page)
         elif choice == 'p':
-            target_url = data['previous_page']
-            print_ticket_list(self, connect_to_api(self, target_url))
+            target_url = previous_page
+            curr_page -= 1
+            print_ticket_list(self, connect_to_api(self, target_url), curr_page)
         else:
             return None 
-    elif (data['next_page'] != None) & (data['previous_page'] == None):
+    elif (next_page != None) & (previous_page == None):
         choice = input('Press "n" for next page, or press any key back to menu: ')
         if choice == 'n':
-            target_url = data['next_page']
-            print_ticket_list(self, connect_to_api(self, target_url))
+            target_url = next_page
+            curr_page += 1
+            print_ticket_list(self, connect_to_api(self, target_url), curr_page)
         else:
             return None
     else:
         choice = input('Press "p" for previous page, or any key back to menu: ')
         if choice == 'p':
-            target_url = data['previous_page']
-            print_ticket_list(self, connect_to_api(self, target_url))
+            target_url = previous_page
+            curr_page -= 1
+            print_ticket_list(self, connect_to_api(self, target_url), curr_page)
         else:
             return None
 
@@ -125,7 +133,7 @@ def clear_screen():
 
 #print main menu
 def print_menu():
-    print(35 * '-' + 'Welcome to your Ticket Viewer!' + 35 * '-'
+    print(35 * '=' + 'Welcome to your Ticket Viewer!' + 35 * '='
     + '\nPress 1 - To List all Tickets'
     + '\nPress 2 - To View a Ticket by Ticket ID'
     + '\nType "quit" or Press "q" to exit the program'

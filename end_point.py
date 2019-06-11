@@ -16,7 +16,8 @@ class end_point:
         if response.status_code != 200:
             print(connection_error_handling(self, response.status_code))
         else:
-            print_ticket_list(self, response)
+            curr_page = 1
+            print_ticket_list(self, response, curr_page)
             
     #list one particular ticket with the ticket id provide by the user
     def list_single_ticket(self):
@@ -29,7 +30,7 @@ class end_point:
             print(connection_error_handling(self, response.status_code))
         else:
             print_single_ticket(self, data)
-        input(100 * '-' + '\nNow back to Menu, press any key to continue..')    
+        input(100 * '=' + '\nNow back to Menu, press any key to continue..')    
 
     #menu display function
     def display_menu(self):
