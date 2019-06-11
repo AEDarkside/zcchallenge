@@ -1,5 +1,4 @@
-import requests, base64, datetime
-from os import name, system
+import requests, base64, datetime, sys, os
 from lib.settings import (api_user, api_pwd, error_code, list_item, time_format, 
 ticket_limit, ticekt_item)
 
@@ -44,6 +43,7 @@ def print_ticket_list(self, response, curr_page):
     print('Request Successful, Status code: ', response.status_code)
     pages = int(ticket_count / int(ticket_limit))
     remamin_tkts = ticket_count - pages * int(ticket_limit)
+
     #display total pages
     if(remamin_tkts > 0):
         pages += 1
@@ -54,23 +54,35 @@ def print_ticket_list(self, response, curr_page):
     for item in data['tickets'][0]:
        if item in list_item:
             title_str += str(list_item[str(item)])
-    print(title_str)    
+    print(title_str)
+
     #print ticket
     for ticket in data['tickets']:
-        ticket_str = ''
         for item in ticket:
             if item in list_item:
                 if item == 'created_at':
                     date_obj = datetime.datetime.strptime(str(ticket[str(item)]), "%Y-%m-%dT%H:%M:%SZ")
-                    ticket_str += date_obj.strftime(time_format) + '    '
-                else: 
-                    ticket_str += str(ticket[str(item)]) + '    '
-        print(ticket_str)
+                    create_date = date_obj.strftime(time_format)
+                elif item == 'id':
+                    ticket_id = str(ticket[str(item)])
+                elif item == 'status':
+                    status = str(ticket[str(item)])
+                elif item == 'subject':
+                    subject = str(ticket[str(item)])
+                elif item == 'requester_id':
+                    requester = str(ticket[str(item)])
+        print('{:6}'.format(ticket_id)
+        + '{:22}'.format(create_date)
+        + '{:49.49}'.format(subject)
+        + '{:10}'.format(status)
+        + '{:15}'.format(requester))
+
     ticket_list_pagination(self, data['next_page'], data['previous_page'], curr_page)
     
 #check if current page has next page or previous page
 def ticket_list_pagination(self, next_page, previous_page, curr_page):
     print(100 * '=')
+
     if (next_page != None) & (previous_page != None):
         choice = input('Press "n" for next page, Press "p" for previous page, or press any key back to menu: ')
         if choice == 'n':
@@ -109,27 +121,41 @@ def print_single_ticket(self, data):
                 continue
             else:
                 title_str += str(ticekt_item[str(item)])
-    print(title_str)    
+    print(title_str)
+        
     #print ticket
-    ticket_str = ''
     for item in data['ticket']:
         if item in ticekt_item:
             if item == 'created_at':
                 date_obj = datetime.datetime.strptime(data['ticket'][str(item)], "%Y-%m-%dT%H:%M:%SZ")
-                ticket_str += date_obj.strftime(time_format) + '    '
+                create_date = date_obj.strftime(time_format)
+            elif item == 'id':
+                ticket_id = str(data['ticket'][str(item)])
+            elif item == 'status':
+                status = str(data['ticket'][str(item)])
+            elif item == 'subject':
+                subject = str(data['ticket'][str(item)])
+            elif item == 'requester_id':
+                requester = str(data['ticket'][str(item)])
             elif item == 'description':
                 ticket_desc = str(data['ticket'][str(item)])
-            else: 
-                ticket_str += str(data['ticket'][str(item)]) + '    '
-    print(ticket_str + '\n' + 
-        100 * '-' + '\nDescription: \n' + ticket_desc)
+            elif item == 'priority': 
+                priority = str(data['ticket'][str(item)])
+
+    print('{:6}'.format(ticket_id)
+    + '{:22}'.format(create_date)
+    + '{:49.49}'.format(subject)
+    + '{:11}'.format(priority)
+    + '{:10}'.format(status)
+    + '{:15}'.format(requester))
+    print(100 * '-' + '\nTicket Description:\n' + 100 * '-' + '\n' + ticket_desc)
 
 #this is to clear the screen
 def clear_screen():
-    if name == 'nt':
-        _ = system('cls')
+    if os.name == 'nt':
+        _ = os.system('cls')
     else:
-        _ = system('clear')
+        _ = os.system('clear')
 
 #print main menu
 def print_menu():
@@ -138,3 +164,9 @@ def print_menu():
     + '\nPress 2 - To View a Ticket by Ticket ID'
     + '\nType "quit" or Press "q" to exit the program'
     + '\n' + 100 * '-') 
+
+#set terminal size for better user experience when run in windows family
+def set_terminal_size():
+    if os.name == 'nt':
+        os.system("mode con cols=120 lines=50")
+        

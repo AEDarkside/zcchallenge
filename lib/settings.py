@@ -26,7 +26,7 @@ list_item = {
     'id': 'ID   |',
     'created_at': 'Created at           |',
     'status': 'Status   |',
-    'subject': 'Subject                                 |',
+    'subject': 'Subject                                         |',
     'requester_id': 'Requester ID     |',
 }
 
@@ -35,7 +35,7 @@ ticekt_item = {
     'id': 'ID   |',
     'created_at': 'Created at           |',
     'status': 'Status   |',
-    'subject': 'Subject                                 |',
+    'subject': 'Subject                                         |',
     'requester_id': 'Requester ID     |',
     'priority' : 'Priority  |',
     'description': '\nDescription: ',
