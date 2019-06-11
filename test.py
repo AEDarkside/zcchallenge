@@ -16,10 +16,15 @@ class api_connection_test(unittest.TestCase):
         self.assertTrue(self.response != None)
     
     #test against error cases
-    def test_fail_auth_request(self):
+    def test_fail_on_auth_request(self):
         response = connect_api_with_user_input(self, self.target_url, 'test123', '1234')
         expectError = connection_error_handling(self, response.status_code)
         self.assertTrue(expectError, error_code['401'])
+    
+    def test_fail_on_url_request(self):
+        response = connect_to_api(self, subdomain)
+        expectError = connection_error_handling(self, response.status_code)
+        self.assertTrue(expectError, error_code['400'])
 
 class ticket_viewer_test(unittest.TestCase):
     def setUp(self):
