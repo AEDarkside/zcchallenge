@@ -21,15 +21,15 @@ This Ticket Viewer is a program written in python that will connected to Zendesk
 ## Installation
 Python version: 3.6.7, required dependency: 'request'
 -Dependency install use:
-        pip install request
+            pip install request
 
 ## Usage
-<p>Change current working directory to root directory:</p>
+Change current working directory to root directory:
 -To run the program use:
-        python end_point.py
+            python end_point.py
 
 -To run unit tests use:
-        python -m unittest test
+            python -m unittest test
 
 ## Author
 ZhiChao Chen - zc.chen0411@gmail.com
