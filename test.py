@@ -1,8 +1,9 @@
 #This file contain few happy path test
-import unittest, random
-from lib.settings import list_url, subdomain, error_code, content_type, api_url, ticket_limit
+import unittest, random, base64
+from lib.settings import (list_url, subdomain, error_code, content_type, 
+api_url, ticket_limit, api_pwd)
 from lib.utils import (connect_to_api, connection_error_handling, 
-connect_api_with_user_input)
+connect_api_with_user_input, get_password, get_user_email)
 
 class api_connection_test(unittest.TestCase):
     def setUp(self):
@@ -19,12 +20,13 @@ class api_connection_test(unittest.TestCase):
     def test_fail_on_auth_request(self):
         response = connect_api_with_user_input(self, self.target_url, 'test123', '1234')
         expectError = connection_error_handling(self, response.status_code)
-        self.assertTrue(expectError, error_code['401'])
+        self.assertEqual(expectError, error_code['401'])
     
     def test_fail_on_url_request(self):
-        response = connect_to_api(self, subdomain)
+        target_url = subdomain + 'example'
+        response = connect_to_api(self, target_url)
         expectError = connection_error_handling(self, response.status_code)
-        self.assertTrue(expectError, error_code['400'])
+        self.assertEqual(expectError, error_code['404'])
 
 class ticket_viewer_test(unittest.TestCase):
     def setUp(self):
@@ -39,7 +41,7 @@ class ticket_viewer_test(unittest.TestCase):
         if(pages > 1):
             self.assertTrue(self.count > 0, self.next_page != None)
         else:
-            self.assertTrue(self.count == ticket_limit)   
+            self.assertEqual(self.count, ticket_limit)   
 
     def test_single_ticket(self):
         ticket_id = random.randint(0, self.count)
@@ -48,6 +50,11 @@ class ticket_viewer_test(unittest.TestCase):
         ticket = response.json()
         result_id = ticket['ticket']['id']
         self.assertEqual(ticket_id, result_id)
+
+class ticket_viewer_util_test(unittest.TestCase):  
+    def test_get_user_email(self):
+        user_email = get_user_email()
+        self.assertTrue(user_email != None)
 
 if __name__ == '__main__':
     unittest.main()
