@@ -18,6 +18,15 @@ This Ticket Viewer is a program written in python that will connected to Zendesk
         README.md           - readme
         test.py             - contain few tests
 
+## API Used in this Program
+
+        1. To list all tickets with pagination:
+        {subdomain}.zendesk.com/api/v2/tickets.json?per_page=25&sort_by=id&sort_order=desc&assignee_id={user_id}
+        2. To get user account name:
+        {subdomain}.zendesk.com/api/v2/users/search.json?query={email}
+        3. To get a particular ticket:
+        {subdomain}.zendesk.com/api/v2/tickets/{id}.json
+
 ## Installation
 Python version: 3.6.7, package required: 'request'
 
