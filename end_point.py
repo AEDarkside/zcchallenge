@@ -1,16 +1,20 @@
 import json, requests
 from lib.settings import (subdomain, list_url, api_url, content_type, per_page, 
-ticket_limit)
+ticket_limit, user_search_url, assignee_url)
 from lib.utils import (connect_to_api, connection_error_handling, clear_screen, 
-print_menu, print_ticket_list, print_single_ticket, set_terminal_size)
+print_menu, print_ticket_list, print_single_ticket, set_terminal_size, get_user_email)
 
 class end_point:
     def __init__(self, subdomain):
-        self._subdomain = subdomain
+        user_email = get_user_email()
+        target_url = subdomain + user_search_url + user_email
+        data = connect_to_api(self, target_url).json()
+        self.user_name = data['users'][0]['name']
+        self.user_id = data['users'][0]['id']
 
-    #Request Ticket via HTTP request (experimental)
-    def ticket_listing(self):
-        target_url = self._subdomain + list_url + per_page + ticket_limit
+    def list_all_tickets(self):
+        target_url = (subdomain + list_url + per_page + ticket_limit + assignee_url
+        + str(self.user_id)) 
         response = connect_to_api(self, target_url)
 
         #check if response code other than 200
@@ -39,10 +43,10 @@ class end_point:
         menu = True
         while menu:
             clear_screen()
-            print_menu()
+            print_menu(self, self.user_name)
             choice = input('Select your view option: ')
             if choice == '1':
-                view_ticket.ticket_listing()
+                view_ticket.list_all_tickets()
             elif choice == '2':
                 view_ticket.list_single_ticket()
             elif choice in ('quit', 'q'):

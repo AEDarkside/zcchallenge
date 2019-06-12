@@ -3,12 +3,15 @@ from lib.settings import (api_user, api_pwd, error_code, list_item, time_format,
 ticket_limit, ticekt_item)
 
 #decrypt password for use in authentication
-def get_password(self, api_pwd):
+def get_password():
     return base64.b64decode(api_pwd)
+
+def get_user_email():
+    return api_user
 
 #this function connect to zendesk api taking the url as parameter
 def connect_to_api(self, target_url):
-    pwd = get_password(self, api_pwd)
+    pwd = get_password()
     response = requests.get(target_url, auth=(api_user, pwd))
     return response
 
@@ -71,7 +74,7 @@ def print_ticket_list(self, response, curr_page):
                     subject = str(ticket[str(item)])
                 elif item == 'requester_id':
                     requester = str(ticket[str(item)])
-        print('{:6}'.format(ticket_id)
+        print('{:10}'.format(ticket_id)
         + '{:22}'.format(create_date)
         + '{:49.49}'.format(subject)
         + '{:10}'.format(status)
@@ -142,7 +145,7 @@ def print_single_ticket(self, data):
             elif item == 'priority': 
                 priority = str(data['ticket'][str(item)])
 
-    print('{:6}'.format(ticket_id)
+    print('{:10}'.format(ticket_id)
     + '{:22}'.format(create_date)
     + '{:49.49}'.format(subject)
     + '{:11}'.format(priority)
@@ -158,8 +161,9 @@ def clear_screen():
         _ = os.system('clear')
 
 #print main menu
-def print_menu():
+def print_menu(self, user_name):
     print(35 * '=' + 'Welcome to your Ticket Viewer!' + 35 * '='
+    + '\nHi ' + user_name + '! Here is your ticket viewer menu:'
     + '\nPress 1 - To List all Tickets'
     + '\nPress 2 - To View a Ticket by Ticket ID'
     + '\nType "quit" or Press "q" to exit the program'
