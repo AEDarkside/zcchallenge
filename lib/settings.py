@@ -4,7 +4,9 @@ api_url = 'tickets/'
 content_type = '.json'
 list_url = 'tickets.json?sort_by=id&sort_order=desc'
 per_page = '&per_page='
+assignee_url = '&assignee_id='
 ticket_limit = '25'
+user_search_url = 'users/search.json?query='
 api_user = 'zc.chen0411@gmail.com'
 api_pwd = 'TWE5NDA0MTE='
 time_format = '%Y-%m-%d %H:%M:%S'
@@ -23,7 +25,7 @@ error_code = {
 
 #listing dictionary
 list_item = {
-    'id': 'ID   |',
+    'id': 'ID       |',
     'created_at': 'Created at           |',
     'status': 'Status   |',
     'subject': 'Subject                                         |',
@@ -32,7 +34,7 @@ list_item = {
 
 #ticket dictionary
 ticekt_item = {
-    'id': 'ID   |',
+    'id': 'ID       |',
     'created_at': 'Created at           |',
     'status': 'Status   |',
     'subject': 'Subject                                         |',
