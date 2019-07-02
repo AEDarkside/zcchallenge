@@ -28,7 +28,7 @@ This Ticket Viewer is a program written in python that will connected to Zendesk
         {subdomain}.zendesk.com/api/v2/tickets/{id}.json
 
 ## Installation
-Python version: 3.6.7, package required: 'request'
+Python version: 3.6.7, package required: 'requests'
 
 - To install python 3.6.7
 
@@ -52,9 +52,9 @@ For Macintosh:
 
         1. See https://www.python.org/download/mac/ for instructions
 
-- To install package 'request' use:
+- To install package 'requests' use:
 
-        pip install request
+        pip install requests
 
 ## Setting up PATH variables
 - For Windows:
